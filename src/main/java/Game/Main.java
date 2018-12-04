@@ -12,29 +12,30 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    private Board board = new Board();
+    private State gameState = new State();
     private GridPane grid = new GridPane();
     private Stage stage1 = new Stage();
     private Label counter = new Label("Moves: ");
     private Label solved = new Label("");
 
 
+
     public static void main(String[] args){ launch(args);}
 
 
     public void start(Stage stage) {
-        stage1.setScene(new Scene(displayBoard(board)));
+        stage1.setScene(new Scene(displayState(gameState)));
         stage1.show();
     }
 
 
-    private Pane displayBoard(Board board) {
+    private Pane displayState(State gameState) {
         GridPane newGrid = new GridPane();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                Button button = new Button(String.valueOf(board.board[i][j].getCoordinate()));
+                Button button = new Button(String.valueOf(gameState.getBoard()[i][j].getCoordinate()));
                 button.setPrefSize(120, 120);
-                if (board.board[i][j].getValue())
+                if (gameState.getBoard()[i][j].getValue())
                     button.setStyle("-fx-base: #FBFBFB");
                 else
                     button.setStyle("-fx-base: #202020");
@@ -43,11 +44,11 @@ public class Main extends Application {
             }
         }
 
-        if (board.isSolved()) {
-            solved.setText("Solved in " + Integer.toString(board.getMoveCounter()) + " moves!");
+        if (gameState.getIsSolved()) {
+            solved.setText("Solved in " + Integer.toString(gameState.getMoveCounter()) + " moves!");
         }
 
-        counter.setText("Moves: " + Integer.toString(board.getMoveCounter()));
+        counter.setText("Moves: " + Integer.toString(gameState.getMoveCounter()));
         Button newGameButton = new Button("New Game");
         newGameButton.setOnMouseClicked(event -> newGame());
         Button solveButton = new Button("Solve");
@@ -69,29 +70,21 @@ public class Main extends Application {
     private void flip(MouseEvent click) {
         int x = grid.getColumnIndex((Node)click.getSource());
         int y = grid.getRowIndex((Node)click.getSource());
-        board.board[x][y].flip();                     //Flip clicked square
-        if (x > 0)
-            board.board[x - 1][y].flip();         //Flip left square if not on left edge
-        if (x < 4)
-            board.board[x + 1][y].flip();         //Flip right square if not on right edge
-        if (y > 0)
-            board.board[x][y - 1].flip();         //Flip above square if not on top edge
-        if (y < 4)
-            board.board[x][y + 1].flip();         //Flip below square if not on bottom edge
 
-        board.incramentMoves();
-        stage1.setScene(new Scene(displayBoard(board)));
+        gameState.flip(x, y);
+        gameState.incramentMoves();
+        stage1.setScene(new Scene(displayState(gameState)));
         stage1.show();
     }
 
     private void newGame() {
-        board = new Board();
-        stage1.setScene(new Scene(displayBoard(board)));
+        gameState = new State();
+        stage1.setScene(new Scene(displayState(gameState)));
         stage1.show();
     }
 
     private void solveGame() {
-        Solver solver = new Solver();
+        Solver solver = new Solver(gameState);
         solver.solveGame();
     }
 
