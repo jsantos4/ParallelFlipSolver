@@ -3,17 +3,17 @@ package Game;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Board {
-    boolean[][] board;
+    Tile[][] board;
     private int moveCounter;
     private boolean isSolved;
 
     public Board() {
         isSolved = false;
         moveCounter = 0;
-        board = new boolean[5][5];
+        board = new Tile[5][5];
         for(int i = 0; i < 5; i ++) {
             for (int j = 0; j < 5; j++) {
-                board[i][j] = ThreadLocalRandom.current().nextBoolean();
+                board[i][j] = new Tile(i, j, ThreadLocalRandom.current().nextBoolean());
             }
         }
     }
@@ -33,8 +33,8 @@ public class Board {
         ++moveCounter;
     }
 
-    public void decramentMoves() {
-        --moveCounter;
+    public void flip(int x, int y) {
+        board[x][y].flip();
     }
 
     public int getMoveCounter() {
@@ -44,7 +44,7 @@ public class Board {
     public boolean isSolved() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (!board[i][j]) {
+                if (!board[i][j].getValue()) {
                     return isSolved;
                 }
             }

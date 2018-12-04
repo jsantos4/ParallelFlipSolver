@@ -7,10 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -34,9 +32,9 @@ public class Main extends Application {
         GridPane newGrid = new GridPane();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                Button button = new Button(String.valueOf(board.board[i][j]));
+                Button button = new Button(String.valueOf(board.board[i][j].getCoordinate()));
                 button.setPrefSize(120, 120);
-                if (board.board[i][j])
+                if (board.board[i][j].getValue())
                     button.setStyle("-fx-base: #FBFBFB");
                 else
                     button.setStyle("-fx-base: #202020");
@@ -71,15 +69,15 @@ public class Main extends Application {
     private void flip(MouseEvent click) {
         int x = grid.getColumnIndex((Node)click.getSource());
         int y = grid.getRowIndex((Node)click.getSource());
-        board.board[x][y] = !board.board[x][y];                     //Flip clicked square
+        board.board[x][y].flip();                     //Flip clicked square
         if (x > 0)
-            board.board[x - 1][y] = !board.board[x - 1][y];         //Flip left square if not on left edge
+            board.board[x - 1][y].flip();         //Flip left square if not on left edge
         if (x < 4)
-            board.board[x + 1][y] = !board.board[x + 1][y];         //Flip right square if not on right edge
+            board.board[x + 1][y].flip();         //Flip right square if not on right edge
         if (y > 0)
-            board.board[x][y - 1] = !board.board[x][y - 1];         //Flip above square if not on top edge
+            board.board[x][y - 1].flip();         //Flip above square if not on top edge
         if (y < 4)
-            board.board[x][y + 1] = !board.board[x][y + 1];         //Flip below square if not on bottom edge
+            board.board[x][y + 1].flip();         //Flip below square if not on bottom edge
 
         board.incramentMoves();
         stage1.setScene(new Scene(displayBoard(board)));
