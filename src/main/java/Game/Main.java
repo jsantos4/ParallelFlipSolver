@@ -1,6 +1,5 @@
 package Game;
 
-import Solver.Solver;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,7 +19,12 @@ public class Main extends Application {
 
 
 
-    public static void main(String[] args){ launch(args);}
+    public static void main(String[] args){
+        State testState = new State();
+        testState.compute();
+
+        //launch(args);
+    }
 
 
     public void start(Stage stage) {
@@ -84,8 +88,7 @@ public class Main extends Application {
     }
 
     private void solveGame() {
-        Solver solver = new Solver(gameState);
-        solver.solveGame();
+        gameState.compute();
     }
 
 }
