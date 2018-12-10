@@ -1,5 +1,6 @@
 package Game;
 
+
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -9,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
 
 public class Main extends Application {
     private State gameState = new State();
@@ -20,10 +22,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args){
-        State testState = new State();
-        testState.compute();
-
-        //launch(args);
+        launch(args);
     }
 
 
@@ -48,7 +47,7 @@ public class Main extends Application {
             }
         }
 
-        if (gameState.getIsSolved()) {
+        if (gameState.isSolved()) {
             solved.setText("Solved in " + Integer.toString(gameState.getMoveCounter()) + " moves!");
         }
 

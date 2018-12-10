@@ -4,11 +4,11 @@ public class Tile {
     private int x, y;
     private boolean value, hasFlipped;
 
-    public Tile(int x, int y, boolean value) {
+    public Tile(int x, int y, boolean value, boolean hasFlipped) {
         this.x = x;
         this.y = y;
         this.value = value;
-        hasFlipped = false;
+        this.hasFlipped = hasFlipped;
     }
 
     public void flip() {
