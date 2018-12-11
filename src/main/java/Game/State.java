@@ -10,8 +10,8 @@ public class State extends RecursiveAction {
     private ArrayList<Tile> movesMade;
     private int moveCounter;
     private boolean isSolved;
-    public State parent;
-    private ArrayList<Tile> initSolution, stateSolution;
+    private State parent;
+    private ArrayList<Tile> stateSolution;
 
     public State() {
         parent = null;
@@ -20,7 +20,7 @@ public class State extends RecursiveAction {
         board = new Tile[5][5];
         tiles = new Tile[25];
         movesMade = new ArrayList<>();
-        initSolution = new ArrayList<>();
+        ArrayList<Tile> initSolution = new ArrayList<>();
         stateSolution = new ArrayList<>();
 
         int counter = -1;
@@ -34,7 +34,8 @@ public class State extends RecursiveAction {
             }
         }
 
-        for (int i = 0; i < ThreadLocalRandom.current().nextInt(3, 7); i++) {
+        //ThreadLocalRandom.current().nextInt(tiles.length/2, tiles.length)
+        for (int i = 0; i < 3; i++) {
             int x = ThreadLocalRandom.current().nextInt(5);
             int y = ThreadLocalRandom.current().nextInt(5);
             if (!board[x][y].getFlipped()) {
@@ -48,12 +49,13 @@ public class State extends RecursiveAction {
             System.out.println(initSolution.get(i).getCoordinate());
 
         }
+
         movesMade = new ArrayList<>();                  //Reset previous moves as no moves have actually been made
 
 
     }
 
-    public State(State parent) {
+    private State(State parent) {
         this.parent = parent;
         moveCounter = parent.getMoveCounter();
         isSolved = false;
@@ -78,18 +80,8 @@ public class State extends RecursiveAction {
 
     }
 
-    public String asString() {
-        String out = "";
-        for (int i = 0; i < 5; i++) {
-            out += "\n";
-            for (int j = 0; j < 5; j++) {
-                out += board[j][i].getValue() + " ";
-            }
-        }
-        return out;
-    }
 
-    public void incramentMoves() {
+    public void incrementMoves() {
         ++moveCounter;
     }
 
@@ -113,15 +105,11 @@ public class State extends RecursiveAction {
         return moveCounter;
     }
 
-    public Tile[] getTiles() {
-        return tiles;
-    }
-
     public Tile[][] getBoard() {
         return board;
     }
 
-    public ArrayList<Tile> getMovesMade() {
+    private ArrayList<Tile> getMovesMade() {
         return movesMade;
     }
 
@@ -139,26 +127,24 @@ public class State extends RecursiveAction {
     private void solveGame() {
         ArrayList<State> nextStates = getNextStates();
         for (State state: nextStates) {
-            if(!state.parent.getMovesMade().contains(state)) {
-                if (state.isSolved()) {
-                    stateSolution = state.getMovesMade();
-                    System.out.println("Flip tiles:");
-                    for (Tile tile: stateSolution) {
-                        System.out.println(tile.getCoordinate());
-                    }
-                    state.join();
-                } else if (state.getMovesMade().size() == 15){
-                    state.join();
-                } else {
-                    state.fork();
+            if (state.isSolved()) {
+                stateSolution = state.getMovesMade();
+                System.out.println("Flip tiles:");
+                for (Tile tile: stateSolution) {
+                    System.out.println(tile.getCoordinate());
                 }
+                state.join();
+            } else if (state.getMovesMade().size() == 25){
+                state.join();
+            } else {
+                state.fork();
             }
         }
     }
 
     private ArrayList<State> getNextStates() {
         ArrayList<State> states = new ArrayList<>();
-        State newState = null;
+        State newState;
 
         for (Tile tile: tiles) {
             newState = new State(this);

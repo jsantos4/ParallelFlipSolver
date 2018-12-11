@@ -75,7 +75,7 @@ public class Main extends Application {
         int y = grid.getRowIndex((Node)click.getSource());
 
         gameState.flip(x, y);
-        gameState.incramentMoves();
+        gameState.incrementMoves();
         stage1.setScene(new Scene(displayState(gameState)));
         stage1.show();
     }
