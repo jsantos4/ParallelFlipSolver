@@ -130,7 +130,7 @@ public class State extends RecursiveAction {
     private void solveGame() {
         ArrayList<State> nextStates = getNextStates();
         for (State state: nextStates) {
-            if (!state.isSolved()) {
+            if (!state.isSolved() && !state.done.get()) {
                 state.fork();
             } else if (state.getMovesMade().size() == 25 && state.parent != null){
                 done.compareAndSet(false, true);
