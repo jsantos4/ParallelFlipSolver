@@ -12,8 +12,8 @@ public class State extends RecursiveAction {
     private int moveCounter;
     private State parent;
     private ArrayList<Tile> stateSolution;
-    private boolean isSolved = false;
-    public static AtomicBoolean done;
+    private AtomicBoolean isSolved = new AtomicBoolean(false);
+    private static AtomicBoolean done;
 
     public State() {
         parent = null;
@@ -132,12 +132,12 @@ public class State extends RecursiveAction {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (!board[i][j].getValue()) {
-                    return isSolved;
+                    return isSolved.get();
                 }
             }
         }
         done.compareAndSet(false, true);
-        return isSolved;
+        return isSolved.get();
     }
 
     private ArrayList<State> getNextStates() {
