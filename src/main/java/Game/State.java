@@ -78,7 +78,6 @@ public class State extends RecursiveAction {
     @Override
     protected void compute() {
         solveGame();
-
     }
 
 

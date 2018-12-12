@@ -11,6 +11,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.util.concurrent.ForkJoinPool;
+
 
 public class Main extends Application {
     private State gameState = new State();
@@ -18,6 +20,7 @@ public class Main extends Application {
     private Stage stage1 = new Stage();
     private Label counter = new Label("Moves: ");
     private Label solved = new Label("");
+    private ForkJoinPool forkJoinPool;
 
 
 
@@ -87,7 +90,8 @@ public class Main extends Application {
     }
 
     private void solveGame() {
-        gameState.compute();
+        forkJoinPool = new ForkJoinPool();
+        forkJoinPool.invoke(gameState);
     }
 
 }
