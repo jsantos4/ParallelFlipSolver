@@ -133,9 +133,10 @@ public class State extends RecursiveAction {
                 for (Tile tile: stateSolution) {
                     System.out.println(tile.getCoordinate());
                 }
-                state.join();
+                return;
+                //state.cancel(false);
             } else if (state.getMovesMade().size() == 25){
-                state.join();
+                //state.cancel(false);
             } else {
                 state.fork();
             }
