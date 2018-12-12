@@ -79,11 +79,12 @@ public class State extends RecursiveAction {
     protected void compute() {
         ArrayList<State> nextStates = getNextStates();
         for (State state: nextStates) {
-            if (!state.isSolved() && !done.get()) {
+            Boolean solved = state.isSolved();
+            if (!solved && !done.get()) {
                 state.fork();
             } else if (state.getMovesMade().size() == 25 && state.parent != null){
                 state.join();
-            } else if (state.isSolved()){
+            } else if (solved){
                 stateSolution = state.getMovesMade();
                 System.out.println("Flip tiles:");
                 for (Tile tile: stateSolution) {
