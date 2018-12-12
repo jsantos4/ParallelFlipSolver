@@ -77,8 +77,22 @@ public class State extends RecursiveAction {
 
     @Override
     protected void compute() {
-        if (!this.done.get()) {
-            solveGame();
+        ArrayList<State> nextStates = getNextStates();
+        for (State state: nextStates) {
+            if (!state.isSolved() && !state.done.get()) {
+                state.fork();
+            } else if (state.getMovesMade().size() == 25 && state.parent != null){
+                done.compareAndSet(false, true);
+                state.join();
+            } else {
+                stateSolution = state.getMovesMade();
+                System.out.println("Flip tiles:");
+                for (Tile tile: stateSolution) {
+                    System.out.println(tile.getCoordinate());
+                }
+                done.compareAndSet(false, true);
+                state.join();
+            }
         }
     }
 
@@ -125,26 +139,6 @@ public class State extends RecursiveAction {
         }
         done.compareAndSet(false, true);
         return done.get();
-    }
-
-    private void solveGame() {
-        ArrayList<State> nextStates = getNextStates();
-        for (State state: nextStates) {
-            if (!state.isSolved() && !state.done.get()) {
-                state.fork();
-            } else if (state.getMovesMade().size() == 25 && state.parent != null){
-                done.compareAndSet(false, true);
-                state.join();
-            } else {
-                stateSolution = state.getMovesMade();
-                System.out.println("Flip tiles:");
-                for (Tile tile: stateSolution) {
-                    System.out.println(tile.getCoordinate());
-                }
-                done.compareAndSet(false, true);
-                state.join();
-            }
-        }
     }
 
     private ArrayList<State> getNextStates() {
