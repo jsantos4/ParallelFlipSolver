@@ -51,7 +51,7 @@ public class Main extends Application {
         }
 
         if (gameState.isSolved()) {
-            solved.setText("Solved in " + Integer.toString(gameState.getMoveCounter()) + " moves!");
+            solved.setText("Solved in " + Integer.toString(gameState.getMoveCounter()) + " moves");
         }
 
         counter.setText("Moves: " + Integer.toString(gameState.getMoveCounter()));

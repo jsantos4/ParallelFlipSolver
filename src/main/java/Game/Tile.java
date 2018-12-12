@@ -11,31 +11,17 @@ public class Tile {
         this.hasFlipped = hasFlipped;
     }
 
-    public void flip() {
-        value = !value;
-    }
+    public void flip() { value = !value; }
 
-    public void setHasFlipped() {
-        hasFlipped = !hasFlipped;
-    }
+    public void setHasFlipped() { hasFlipped = !hasFlipped;}
 
-    public boolean getFlipped() {
-        return hasFlipped;
-    }
+    public boolean getFlipped() { return hasFlipped; }
 
-    public boolean getValue() {
-        return value;
-    }
+    public boolean getValue() { return value; }
 
-    public String getCoordinate() {
-        return "(" + x + ", " + y + ")";
-    }
+    public String getCoordinate() { return "(" + x + ", " + y + ")"; }
 
-    public int getX() {
-        return x;
-    }
+    public int getX() { return x; }
 
-    public int getY() {
-        return y;
-    }
+    public int getY() { return y; }
 }
