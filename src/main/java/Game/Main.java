@@ -92,11 +92,6 @@ public class Main extends Application {
     private void solveGame() {
         forkJoinPool = new ForkJoinPool();
         forkJoinPool.invoke(gameState);
-        /*while (true) {
-            if (gameState.done.get()) {
-                forkJoinPool.shutdownNow();
-            }
-        }*/
     }
 
 }

@@ -82,13 +82,12 @@ public class State extends RecursiveAction {
                 state.fork();
             } else if (state.getMovesMade().size() == 25 && state.parent != null){
                 state.join();
-            } else {
+            } else if (state.isSolved()){
                 stateSolution = state.getMovesMade();
                 System.out.println("Flip tiles:");
                 for (Tile tile: stateSolution) {
                     System.out.println(tile.getCoordinate());
                 }
-                done.compareAndSet(false, true);
                 state.join();
             }
         }
