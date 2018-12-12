@@ -127,18 +127,17 @@ public class State extends RecursiveAction {
     private void solveGame() {
         ArrayList<State> nextStates = getNextStates();
         for (State state: nextStates) {
-            if (state.isSolved()) {
+            if (!state.isSolved()) {
+                state.fork();
+            } else if (state.getMovesMade().size() == 25 && state.parent != null){
+                state.cancel(false);
+            } else {
                 stateSolution = state.getMovesMade();
                 System.out.println("Flip tiles:");
                 for (Tile tile: stateSolution) {
                     System.out.println(tile.getCoordinate());
                 }
-                return;
-                //state.cancel(false);
-            } else if (state.getMovesMade().size() == 25){
-                //state.cancel(false);
-            } else {
-                state.fork();
+                state.cancel(false);
             }
         }
     }
