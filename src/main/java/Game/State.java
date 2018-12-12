@@ -12,7 +12,7 @@ public class State extends RecursiveAction {
     private int moveCounter;
     private State parent;
     private ArrayList<Tile> stateSolution;
-    private AtomicBoolean done;
+    public static AtomicBoolean done;
 
     public State() {
         parent = null;
@@ -63,7 +63,6 @@ public class State extends RecursiveAction {
         movesMade = new ArrayList<>(parent.movesMade);
         board = new Tile[5][5];
         tiles = new Tile[25];
-        done = new AtomicBoolean(false);
 
         int counter = -1;
         for(int i = 0; i < 5; i ++) {
@@ -79,10 +78,9 @@ public class State extends RecursiveAction {
     protected void compute() {
         ArrayList<State> nextStates = getNextStates();
         for (State state: nextStates) {
-            if (!state.isSolved() && !state.done.get()) {
+            if (!state.isSolved() && !done.get()) {
                 state.fork();
             } else if (state.getMovesMade().size() == 25 && state.parent != null){
-                done.compareAndSet(false, true);
                 state.join();
             } else {
                 stateSolution = state.getMovesMade();
