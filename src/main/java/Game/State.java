@@ -79,17 +79,16 @@ public class State extends RecursiveAction {
     protected void compute() {
         ArrayList<State> nextStates = getNextStates();
         for (State state: nextStates) {
-            Boolean solved = state.isSolved();
-            if (!solved && !done.get()) {
+            if (!state.isSolved() && !done.get()) {
                 state.fork();
-            } else if (state.getMovesMade().size() == 25 && state.parent != null){
-                state.join();
-            } else if (solved){
+            } else if (state.isSolved()){
                 stateSolution = state.getMovesMade();
                 System.out.println("Flip tiles:");
                 for (Tile tile: stateSolution) {
                     System.out.println(tile.getCoordinate());
                 }
+                state.join();
+            } else if (state.getMovesMade().size() == 25 && state.parent != null){
                 state.join();
             }
         }
