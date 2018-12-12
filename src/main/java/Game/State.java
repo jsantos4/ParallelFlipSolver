@@ -77,7 +77,9 @@ public class State extends RecursiveAction {
 
     @Override
     protected void compute() {
-        solveGame();
+        if (!this.done.get()) {
+            solveGame();
+        }
     }
 
 
