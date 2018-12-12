@@ -139,6 +139,12 @@ public class State extends RecursiveAction {
                 for (Tile tile: stateSolution) {
                     System.out.println(tile.getCoordinate());
                 }
+                done.compareAndSet(false, true);
+                State temp = state.parent;
+                while (temp != null) {
+                    temp.done.compareAndSet(false, true);
+                    temp = temp.parent;
+                }
                 state.join();
             }
         }
