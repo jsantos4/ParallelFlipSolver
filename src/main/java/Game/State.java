@@ -3,25 +3,26 @@ package Game;
 import java.util.ArrayList;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class State extends RecursiveAction {
     private Tile[][] board;
     private Tile[] tiles;
     private ArrayList<Tile> movesMade;
     private int moveCounter;
-    private boolean isSolved;
     private State parent;
     private ArrayList<Tile> stateSolution;
+    private AtomicBoolean done;
 
     public State() {
         parent = null;
-        isSolved = false;
         moveCounter = 0;
         board = new Tile[5][5];
         tiles = new Tile[25];
         movesMade = new ArrayList<>();
         ArrayList<Tile> initSolution = new ArrayList<>();
         stateSolution = new ArrayList<>();
+        done = new AtomicBoolean(false);
 
         int counter = -1;
 
@@ -58,11 +59,11 @@ public class State extends RecursiveAction {
     private State(State parent) {
         this.parent = parent;
         moveCounter = parent.getMoveCounter();
-        isSolved = false;
         stateSolution = new ArrayList<>();
         movesMade = new ArrayList<>(parent.movesMade);
         board = new Tile[5][5];
         tiles = new Tile[25];
+        done = new AtomicBoolean(false);
 
         int counter = -1;
         for(int i = 0; i < 5; i ++) {
@@ -113,15 +114,16 @@ public class State extends RecursiveAction {
         return movesMade;
     }
 
-    public boolean isSolved() {
+    public Boolean isSolved() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (!board[i][j].getValue()) {
-                    return isSolved;
+                    return done.get();
                 }
             }
         }
-        return !isSolved;
+        done.compareAndSet(false, true);
+        return done.get();
     }
 
     private void solveGame() {
@@ -130,6 +132,7 @@ public class State extends RecursiveAction {
             if (!state.isSolved()) {
                 state.fork();
             } else if (state.getMovesMade().size() == 25 && state.parent != null){
+                done.compareAndSet(false, true);
                 state.cancel(false);
             } else {
                 stateSolution = state.getMovesMade();
