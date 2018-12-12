@@ -133,14 +133,14 @@ public class State extends RecursiveAction {
                 state.fork();
             } else if (state.getMovesMade().size() == 25 && state.parent != null){
                 done.compareAndSet(false, true);
-                state.cancel(false);
+                state.join();
             } else {
                 stateSolution = state.getMovesMade();
                 System.out.println("Flip tiles:");
                 for (Tile tile: stateSolution) {
                     System.out.println(tile.getCoordinate());
                 }
-                state.cancel(false);
+                state.join();
             }
         }
     }
