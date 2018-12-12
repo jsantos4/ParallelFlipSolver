@@ -87,6 +87,7 @@ public class State extends RecursiveAction {
                 for (Tile tile: stateSolution) {
                     System.out.println(tile.getCoordinate());
                 }
+                done.compareAndSet(false, true);
                 state.join();
             } else if (state.getMovesMade().size() == 25 && state.parent != null){
                 state.join();
@@ -136,7 +137,7 @@ public class State extends RecursiveAction {
             }
         }
         done.compareAndSet(false, true);
-        return isSolved.get();
+        return !isSolved.get();
     }
 
     private ArrayList<State> getNextStates() {
